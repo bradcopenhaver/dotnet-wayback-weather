@@ -1,0 +1,17 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@model WaybackWeather.Models.InputRequest
+
+<form asp-controller="InputRequest" asp-action="NewRequest">
+    <label asp-for="Location"></label>
+    <input asp-for="Location" type="text" />
+    <label>Date</label>
+    <input type="date" name="dateString" />
+
+    <button type="submit">Submit</button>
+</form>
+
+<p>@ViewBag.Weather</p>

@@ -171,3 +171,7 @@
 -resource:"c:\users\epicodus\documents\visual studio 2015\Projects\WaybackWeather\src\WaybackWeather\obj\Debug\netcoreapp1.0\WaybackWeatherdotnet-compile.deps.json",WaybackWeather.deps.json
 "c:\users\epicodus\documents\visual studio 2015\Projects\WaybackWeather\src\WaybackWeather\Program.cs"
 "c:\users\epicodus\documents\visual studio 2015\Projects\WaybackWeather\src\WaybackWeather\Startup.cs"
+"c:\users\epicodus\documents\visual studio 2015\Projects\WaybackWeather\src\WaybackWeather\Controllers\HomeController.cs"
+"c:\users\epicodus\documents\visual studio 2015\Projects\WaybackWeather\src\WaybackWeather\Controllers\InputRequestController.cs"
+"c:\users\epicodus\documents\visual studio 2015\Projects\WaybackWeather\src\WaybackWeather\Models\EnvironmentVariables.cs"
+"c:\users\epicodus\documents\visual studio 2015\Projects\WaybackWeather\src\WaybackWeather\Models\InputRequest.cs"

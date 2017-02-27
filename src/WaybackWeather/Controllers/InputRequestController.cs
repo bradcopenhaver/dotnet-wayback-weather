@@ -5,16 +5,13 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using WaybackWeather.Models;
 
+// For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+
 namespace WaybackWeather.Controllers
 {
-    public class HomeController : Controller
+    public class InputRequestController : Controller
     {
         // GET: /<controller>/
-        public IActionResult Index()
-        {
-            return View();
-        }
-
         public IActionResult NewRequest()
         {
             return View();
@@ -27,7 +24,7 @@ namespace WaybackWeather.Controllers
             input.Date = date;
             input.GetLatLong();
             ViewBag.Weather = input.GetWeather();
-            return RedirectToAction("Index");
+            return View();
         }
     }
 }
