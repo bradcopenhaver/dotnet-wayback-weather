@@ -21,19 +21,19 @@ namespace WaybackWeather.Models
         public void GetLatLong()
         {
             RestClient client = new RestClient("https://api.mapbox.com");
-            Location = Location.Replace(" ", "+");
+            Location = Location.Replace(" ", "+");    //url seems to prefer + instead of space
             RestRequest request = new RestRequest("/geocoding/v5/mapbox.places/" + Location + ".json?access_token="+ EnvironmentVariables.MapBoxToken, Method.GET);
-            //client.Authenticator = new HttpBasicAuthenticator("", "");
             RestResponse response = new RestResponse();
             Task.Run(async () =>
             {
                 response = await GetResponseContentAsync(client, request) as RestResponse;
             }).Wait();
-            Debug.WriteLine(response);
+
             JObject jsonResponse = JsonConvert.DeserializeObject<JObject>(response.Content);
             object[] features = JsonConvert.DeserializeObject<object[]>(jsonResponse["features"].ToString());
             JObject firstElement = JsonConvert.DeserializeObject<JObject>(features[0].ToString());
             string[] center = JsonConvert.DeserializeObject<string[]>(firstElement["center"].ToString());
+
             Long = float.Parse(center[0]);
             Lat = float.Parse(center[1]);
             LocationResult = firstElement["place_name"].ToString();
@@ -43,12 +43,13 @@ namespace WaybackWeather.Models
         {
             RestClient client = new RestClient("https://api.darksky.net");
             RestRequest request = new RestRequest($"/forecast/{EnvironmentVariables.DarkSkyKey}/{Lat},{Long},{Date}", Method.GET);
-            //client.Authenticator = new HttpBasicAuthenticator("", "");
             RestResponse response = new RestResponse();
+
             Task.Run(async () =>
             {
                 response = await GetResponseContentAsync(client, request) as RestResponse;
             }).Wait();
+
             try
             {
                 JObject jsonResponse = JsonConvert.DeserializeObject<JObject>(response.Content);

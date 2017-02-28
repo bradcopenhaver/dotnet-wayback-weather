@@ -31,6 +31,11 @@ namespace WaybackWeather.Controllers
                 return View("InvalidLocation");
             }
             ViewBag.Weather = input.GetWeather();
+            if (ViewBag.Weather["summary"] == null)
+            {
+                return View("InvalidDate");
+            }
+
             return View();
         }
 
