@@ -1,0 +1,14 @@
+﻿@if (ViewBag.Weather != null)
+{
+
+        @if (ViewBag.Weather["summary"] != null)
+        {
+            <p>Data for @ViewBag.Weather["foundLocation"]:</p>
+            <p>@ViewBag.Weather["summary"]</p>
+            <p>The high was @ViewBag.Weather["temperatureMax"]°F and the low was @ViewBag.Weather["temperatureMin"]°F.</p>
+        }
+        else
+        {
+            <p>We couldn't find data for that date.</p>
+        }
+}

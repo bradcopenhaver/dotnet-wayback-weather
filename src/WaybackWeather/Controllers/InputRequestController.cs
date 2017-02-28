@@ -18,13 +18,22 @@ namespace WaybackWeather.Controllers
         }
 
         [HttpPost]
-        public IActionResult NewRequest(InputRequest input, string dateString)
+        public IActionResult RequestPartial(InputRequest input, string dateString)
         {
             long date = new DateTimeOffset(DateTime.Parse(dateString)).ToUnixTimeSeconds();
             input.Date = date;
-            input.GetLatLong();
+            try
+            {
+                input.GetLatLong();
+            }
+            catch
+            {
+                return View("InvalidLocation");
+            }
             ViewBag.Weather = input.GetWeather();
             return View();
         }
+
+
     }
 }

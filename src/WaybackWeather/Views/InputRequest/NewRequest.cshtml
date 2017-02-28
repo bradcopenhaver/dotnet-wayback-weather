@@ -1,17 +1,42 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
+﻿@{
+    ViewData["Title"] = "Find Historical Data";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 @model WaybackWeather.Models.InputRequest
 
-<form asp-controller="InputRequest" asp-action="NewRequest">
-    <label asp-for="Location"></label>
-    <input asp-for="Location" type="text" />
-    <label>Date</label>
-    <input type="date" name="dateString" />
+<script>
+    $(function () {
+        $("form").submit(function (event) {
+            event.preventDefault();
+            $("#response").addClass("well");
+            $("#response").html("<p>Using Wayback Weather Machine...</p>");
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("RequestPartial", "InputRequest")',
+                data: $(this).serialize(),
+                datatype: 'json',
+                success: function (response) {
+                    $("#response").html(response);
+                }
+            })
+        })
+    })
+</script>
 
-    <button type="submit">Submit</button>
+<h1>Find Historical Data</h1>
+<hr />
+<form asp-controller="InputRequest" asp-action="NewRequest" class="row">
+    <div class="form-group col-xs-12 col-md-6">
+        <label asp-for="Location"></label>
+        <input asp-for="Location" type="text" class="form-control"/>
+    </div>
+    <div class="form-group col-xs-12 col-md-6">
+        <label>Date</label>
+        <input type="date" name="dateString" class="form-control"/>
+    </div>
+    <div class="col-xs-12">
+        <button type="submit" class="btn">Submit</button>
+    </div>
 </form>
 
-<p>@ViewBag.Weather</p>
+<div id="response"></div>

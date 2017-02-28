@@ -16,6 +16,7 @@ namespace WaybackWeather.Models
         public float Lat { get; set; }
         public float Long { get; set; }
         public long Date { get; set; }
+        public string LocationResult { get; set; }
 
         public void GetLatLong()
         {
@@ -35,9 +36,10 @@ namespace WaybackWeather.Models
             string[] center = JsonConvert.DeserializeObject<string[]>(firstElement["center"].ToString());
             Long = float.Parse(center[0]);
             Lat = float.Parse(center[1]);
+            LocationResult = firstElement["place_name"].ToString();
         }
 
-        public string GetWeather()
+        public Dictionary<string, string> GetWeather()
         {
             RestClient client = new RestClient("https://api.darksky.net");
             RestRequest request = new RestRequest($"/forecast/{EnvironmentVariables.DarkSkyKey}/{Lat},{Long},{Date}", Method.GET);
@@ -47,12 +49,28 @@ namespace WaybackWeather.Models
             {
                 response = await GetResponseContentAsync(client, request) as RestResponse;
             }).Wait();
-            JObject jsonResponse = JsonConvert.DeserializeObject<JObject>(response.Content);
-            JObject daily = JsonConvert.DeserializeObject<JObject>(jsonResponse["daily"].ToString());
-            JObject[] data = JsonConvert.DeserializeObject<JObject[]>(daily["data"].ToString());
-            JObject firstElement = JsonConvert.DeserializeObject<JObject>(data[0].ToString());
-            return firstElement["summary"].ToString();
-            
+            try
+            {
+                JObject jsonResponse = JsonConvert.DeserializeObject<JObject>(response.Content);
+                JObject daily = JsonConvert.DeserializeObject<JObject>(jsonResponse["daily"].ToString());
+                JObject[] data = JsonConvert.DeserializeObject<JObject[]>(daily["data"].ToString());
+                JObject firstElement = JsonConvert.DeserializeObject<JObject>(data[0].ToString());
+                return new Dictionary<string, string>
+                {
+                    ["summary"] = firstElement["summary"].ToString(),
+                    ["temperatureMin"] = firstElement["temperatureMin"].ToString(),
+                    ["temperatureMax"] = firstElement["temperatureMax"].ToString(),
+                    ["foundLocation"] = LocationResult
+                };
+            }
+            catch
+            {
+                return new Dictionary<string, string>()
+                {
+                    //Force summary to null in order to check validation on front end
+                    ["summary"] = null
+                };
+            }
         }
 
         public static Task<IRestResponse> GetResponseContentAsync(RestClient theClient, RestRequest theRequest)
